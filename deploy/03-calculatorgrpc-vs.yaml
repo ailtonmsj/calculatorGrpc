@@ -1,0 +1,16 @@
+kind: VirtualService
+apiVersion: networking.istio.io/v1alpha3
+metadata:
+  name: calculatorgrpc
+  namespace: calculatorgrpc
+spec:
+  hosts:
+    - calculatorgrpc.teste.com.br
+  gateways:
+    - calculatorgrpc
+  http:
+    - route:
+        - destination:
+            host: calculatorgrpc.calculatorgrpc.svc.cluster.local
+            port:
+              number: 50081

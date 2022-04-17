@@ -1,0 +1,17 @@
+apiVersion: v1
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: calculatorgrpc
+  namespace: calculatorgrpc
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - calculatorgrpc.teste.com.br
+    port:
+      name: grpc
+      number: 5000
+      protocol: GRPC
+    

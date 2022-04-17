@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: calculatorgrpc
+  name: calculatorgrpc
+  namespace: calculatorgrpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: calculatorgrpc
+  template:
+    metadata:
+      labels:
+        app: calculatorgrpc
+    spec:
+      containers:
+      - image: ailtonmsj/calculatorgrpc
+        name: calculatorgrpc

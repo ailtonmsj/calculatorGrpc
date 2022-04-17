@@ -10,7 +10,7 @@ plugins {
 mainClassName = 'br.com.amsj.grpc.server.CalculatorServer'
 
 group 'br.com.amsj.grpc'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 repositories {
     mavenCentral()

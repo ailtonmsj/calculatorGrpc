@@ -1,9 +1,9 @@
 FROM openjdk:11.0-jdk-slim
 
-ARG JAR_FILE=target/*.jar
+ARG JAR_FILE=build/libs/*-all.jar
 
-COPY ${JAR_FILE} app.jar
+COPY ${JAR_FILE} calculator.jar
 
-EXPOSE 8080
+EXPOSE 50081
 
 ENTRYPOINT ["java","-jar","/calculator.jar"]
