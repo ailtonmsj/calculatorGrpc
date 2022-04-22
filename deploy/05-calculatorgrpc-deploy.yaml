@@ -5,6 +5,7 @@ metadata:
     app: calculatorgrpc
   name: calculatorgrpc
   namespace: calculatorgrpc
+  annotations:
 spec:
   replicas: 1
   selector:
@@ -14,7 +15,11 @@ spec:
     metadata:
       labels:
         app: calculatorgrpc
+      annotations:
+        sidecar.istio.io/userVolume: '[{"name":"descriptor","configMap":{"name":"proto-descriptor","items":[{"key":"proto.pb","path":"proto.pb"}]}}]'
+        sidecar.istio.io/userVolumeMount: '[{"name":"descriptor","mountPath":"/etc/envoy"}]'
     spec:
       containers:
       - image: ailtonmsj/calculatorgrpc
         name: calculatorgrpc
+        imagePullPolicy: Always

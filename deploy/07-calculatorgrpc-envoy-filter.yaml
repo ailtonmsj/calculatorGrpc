@@ -1,0 +1,45 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: calculatorgrpc-envoyfilter
+  namespace: calculatorgrpc
+spec:
+  workloadSelector:
+    labels:
+      app: calculatorgrpc # match your deployment
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_INBOUND
+        listener:
+          filterChain:
+            filter:
+              #name: envoy.filters.network.http_connection_manager
+              name: envoy.http_connection_manager
+              subFilter:
+                name: envoy.filters.http.router
+          portNumber: 50081 # application port
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          typed_config:
+            "@type": type.googleapis.com/envoy.extensions.filters.http.grpc_json_transcoder.v3.GrpcJsonTranscoder
+            convert_grpc_status: true
+            print_options:
+              add_whitespace: true
+              always_print_enums_as_ints: false
+              always_print_primitive_fields: true
+              preserve_proto_field_names: false
+            #proto_descriptor_bin: /etc/envoy/proto.pb # base64 encoded proto descriptor
+            proto_descriptor: /etc/envoy/proto.pb # base64 encoded proto descriptor
+            services:
+              #- calculatorgrpc.calculatorgrpc.svc.cluster.local # your gRPC service
+              - calculator.CalculatorService
+
+          name: envoy.filters.http.grpc_json_transcoder
+    - applyTo: CLUSTER
+      match:
+        cluster:
+          service: "calculatorgrpc.calculatorgrpc.svc.cluster.local"
+      patch:
+        operation: MERGE

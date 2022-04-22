@@ -1,4 +1,3 @@
-apiVersion: v1
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
@@ -11,7 +10,15 @@ spec:
   - hosts:
     - calculatorgrpc.teste.com.br
     port:
-      name: grpc
+      name: calculatorgrpc-grpc-5000
       number: 5000
       protocol: GRPC
-    
+  - hosts:
+    - calculatorgrpc.teste.com.br
+    port:
+      name: calculatorgrpc-https-443
+      number: 443
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: istio-system/calculatorgrpc-cert-ingress
