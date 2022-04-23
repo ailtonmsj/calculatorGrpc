@@ -6,6 +6,8 @@ import io.grpc.stub.StreamObserver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
+
 public class CalculatorServiceImpl extends CalculatorServiceGrpc.CalculatorServiceImplBase {
 
     private static final Logger logger = LogManager.getLogger(CalculatorServiceImpl.class);
@@ -76,5 +78,26 @@ public class CalculatorServiceImpl extends CalculatorServiceGrpc.CalculatorServi
         }
 
         logger.info("Ending calculatorSquareRoot");
+    }
+
+    @Override
+    public void calculatorSum(CalculatorSumRequest request, StreamObserver<CalculatorSumResponse> responseObserver) {
+
+        logger.info("Calling calculatorSum");
+
+        List<Integer> numbers = request.getNumbersList();
+
+        int result = 0;
+
+        for(Integer number : numbers){
+            result += number;
+        }
+
+        responseObserver.onNext(CalculatorSumResponse.newBuilder().
+                setResult(result).
+                build());
+        responseObserver.onCompleted();
+
+        logger.info("Ending calculatorSum");
     }
 }

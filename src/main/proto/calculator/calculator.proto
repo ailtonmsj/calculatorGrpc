@@ -5,6 +5,8 @@ package calculator;
 option java_package = "br.com.amsj.proto.calculator";
 option java_multiple_files = true;
 
+// for transcoder
+import "google/api/annotations.proto";
 
 message CalculatorAverageRequest {
   int32 number = 1;
@@ -22,10 +24,37 @@ message CalculatorSquareRootResponse {
   double square = 1;
 }
 
+message CalculatorSumRequest{
+  repeated int32 numbers = 1;
+}
+
+message CalculatorSumResponse {
+  int32 result = 1;
+}
+
 service CalculatorService {
-  rpc CalculatorAverage (stream CalculatorAverageRequest) returns (CalculatorAverageResponse) {};
+  rpc CalculatorAverage (stream CalculatorAverageRequest) returns (CalculatorAverageResponse) {
+    // Only for transcoder
+    option (google.api.http) = {
+      post: "/v1/calculatoraverage"
+      body: "number"
+    };
+  };
+
+  rpc CalculatorSum (CalculatorSumRequest) returns (CalculatorSumResponse) {
+    // Only for transcoder
+    option (google.api.http) = {
+      post: "/v1/calculatorsum"
+      body: "numbers"
+    };
+  };
 
   // error handling
   // returns an error if a negative number is sent
-  rpc CalculatorSquareRoot (CalculatorSquareRootRequest) returns (CalculatorSquareRootResponse) {};
+  rpc CalculatorSquareRoot (CalculatorSquareRootRequest) returns (CalculatorSquareRootResponse) {
+    // Only for transcoder
+    option (google.api.http) = {
+      get: "/v1/calculatorsquareroot/{number}"
+    };
+  };
 }

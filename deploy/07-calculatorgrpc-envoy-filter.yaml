@@ -14,7 +14,6 @@ spec:
         listener:
           filterChain:
             filter:
-              #name: envoy.filters.network.http_connection_manager
               name: envoy.http_connection_manager
               subFilter:
                 name: envoy.filters.http.router
@@ -30,12 +29,9 @@ spec:
               always_print_enums_as_ints: false
               always_print_primitive_fields: true
               preserve_proto_field_names: false
-            #proto_descriptor_bin: /etc/envoy/proto.pb # base64 encoded proto descriptor
             proto_descriptor: /etc/envoy/proto.pb # base64 encoded proto descriptor
             services:
-              #- calculatorgrpc.calculatorgrpc.svc.cluster.local # your gRPC service
-              - calculator.CalculatorService
-
+              - calculator.CalculatorService # package name in .proto + service name in .proto
           name: envoy.filters.http.grpc_json_transcoder
     - applyTo: CLUSTER
       match:
